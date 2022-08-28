@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Championships\ResultsWizardSteps;
+namespace Spatie\LivewireWizard\Components\Concerns;
 
 use Livewire\Livewire;
 
