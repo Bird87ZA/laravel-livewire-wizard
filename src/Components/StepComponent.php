@@ -2,6 +2,7 @@
 
 namespace Spatie\LivewireWizard\Components;
 
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\Livewire;
 use Spatie\LivewireWizard\Components\Concerns\StepAware;
@@ -44,10 +45,18 @@ abstract class StepComponent extends Component
 
         $stepName = Livewire::getAlias(static::class);
 
+        if (Session::get('spatie-stored-state') === null) {
+            $sessionState = $this->allStepsState;
+        } else {
+            $sessionState = unserialize(Session::pull('spatie-stored-state'));
+        }
+
         $allState = array_merge(
-            $this->allStepsState ?? [],
+            $sessionState ?? [],
             [$stepName => $this->all()]
         );
+
+        Session::put('spatie-stored-state', serialize($allState));
 
         $stateClass
             ->setAllState($allState)

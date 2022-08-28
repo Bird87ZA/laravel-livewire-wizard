@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Session;
 use Livewire\Livewire;
 use Livewire\Testing\TestableLivewire;
 use Spatie\LivewireWizard\Tests\TestSupport\Components\Steps\FirstStepComponent;
@@ -32,6 +33,7 @@ it('can use a custom state class', function () {
 
     $allStepState = $wizard->jsonContent('allStepState');
     expect($allStepState)->toHaveKey('custom-state-step');
+    expect(Session::get('spatie-stored-state'))->not()->toBeEmpty();
 });
 
 it('can load state from different steps', function () {
@@ -47,5 +49,6 @@ it('can load state from different steps', function () {
             $livewireComponent = $testableLivewire->instance();
             $state = $livewireComponent->state()->forStep('first-step');
             expect($state['order'])->toBe(1029);
+            expect(Session::get('spatie-stored-state'))->not()->toBeEmpty();
         });
 });
