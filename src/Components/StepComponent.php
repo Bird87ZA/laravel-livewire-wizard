@@ -45,15 +45,13 @@ abstract class StepComponent extends Component
 
         $stepName = Livewire::getAlias(static::class);
 
-        if (Session::get('spatie-stored-state') === null) {
-            $sessionState = $this->allStepsState;
-        } else {
-            $sessionState = unserialize(Session::pull('spatie-stored-state'));
-        }
+        $sessionState = Session::has('spatie-stored-state') ?
+            unserialize(Session::pull('spatie-stored-state')) :
+            [];
 
         $allState = array_merge(
-            $sessionState ?? [],
-            [$stepName => $this->all()]
+            $this->allStepsState ?? [],
+            [$stepName => array_merge($sessionState, $this->all())]
         );
 
         Session::put('spatie-stored-state', serialize($allState));
