@@ -45,16 +45,14 @@ abstract class StepComponent extends Component
 
         $stepName = Livewire::getAlias(static::class);
 
-        $sessionState = Session::has('spatie-stored-state') ?
-            unserialize(Session::pull('spatie-stored-state')) :
-            [];
+        $sessionState = json_decode(Session::pull('spatie-stored-state')) ?? [];
 
         $allState = array_merge(
             $this->allStepsState ?? [],
             [$stepName => array_merge($sessionState, $this->all())]
         );
 
-        Session::put('spatie-stored-state', serialize($allState));
+        Session::put('spatie-stored-state', json_encode($allState));
 
         $stateClass
             ->setAllState($allState)
